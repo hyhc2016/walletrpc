@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"time"
 	"net"
-	"walletrpc/wallet"
+	"github.com/walletrpc/wallet"
 )
 
 // CoinDefaultHost   default coin address
