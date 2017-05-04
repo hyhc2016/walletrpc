@@ -1,2 +1,9 @@
 Golang 版本的wallet rpc
 用于通过http协议连接钱包
+
+core包
+    小数精度运算
+    进程文件锁
+
+wallet
+    钱包rpc
