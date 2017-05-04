@@ -31,11 +31,7 @@ func abs64(d int64) (int64) {
 }
 func AmountFromValue(value float64) (int64, error) {
 	nAmount := roundint64(value * COIN);
-	if MoneyRange(nAmount) {
-		return nAmount, nil
-	} else {
-		return 0, nil
-	}
+	return nAmount, nil
 }
 
 func ValueFromAmount(amount int64) (value float64) {
