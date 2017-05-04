@@ -1,5 +1,13 @@
 package core
 
+import (
+	"fmt"
+	"os"
+	"io/ioutil"
+	"strconv"
+	"errors"
+)
+
 const (
 	CENT      = 1000000
 	COIN      = 100 * CENT
@@ -57,18 +65,34 @@ func Add(val1, val2 float64) (float64, error) {
 	return v4, nil
 }
 
-/* 计算数值
-	v1, err := core.AmountFromValue(10000000.00009999)
-	if err != nil {
-		return
+//进程锁
+func ProcLock(filename string) {
+	iManPid := fmt.Sprint(os.Getpid())
+	tmpDir := os.TempDir()
+	if err := ProcExsit(tmpDir); err == nil {
+		pidFile, _ := os.Create(filename)
+		defer pidFile.Close()
+		pidFile.WriteString(iManPid)
+	} else {
+		os.Exit(1)
 	}
-	v2, err := core.AmountFromValue(10000000.99999999)
-	if err != nil {
-		return
+}
+
+// 判断进程是否启动
+func ProcExsit(filename string) (err error) {
+	iManPidFile, err := os.Open(filename)
+	defer iManPidFile.Close()
+	if err == nil {
+		filePid, err := ioutil.ReadAll(iManPidFile)
+		if err == nil {
+			pidStr := fmt.Sprintf("%s", filePid)
+			pid, _ := strconv.Atoi(pidStr)
+			_, err := os.FindProcess(pid)
+
+			if err == nil {
+				return errors.New("[ERROR] 进程已经启动.")
+			}
+		}
 	}
-	v3 := v1 + v2
-	v4 := core.ValueFromAmount(v3)
-	v5 := strconv.FormatFloat(v4,'f',-1,64)
-	fmt.Println(v1, v2, v3, v4,v5)
-	return
- */
+	return nil
+}
