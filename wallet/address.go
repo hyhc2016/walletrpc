@@ -10,3 +10,8 @@ type ValidateAddress struct {
 	Account      string `json:"account"`
 }
 
+type Address struct {
+	Result float64 `json:"result"`
+	Error  interface{} `json:"error"`
+	ID     int `json:"id"`
+}

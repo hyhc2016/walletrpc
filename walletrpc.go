@@ -189,3 +189,15 @@ func (client *RpcClient) SendToaddress(address string, amount float64) (txid str
 		return txid.Result, nil
 	}
 }
+
+func (client *RpcClient) GetNewAddress(account string) (string, error) {
+	if b, err := client.Call("getnewaddress", account); err != nil {
+		return "", err
+	} else {
+		var address wallet.Address
+		if err := json.Unmarshal(b, &address); err != nil {
+			return "", err
+		}
+		return address.Result, nil
+	}
+}
