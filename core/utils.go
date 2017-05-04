@@ -42,6 +42,21 @@ func MoneyRange(nValue int64) (bool) {
 	return nValue >= 0 && nValue <= MAX_MONEY
 }
 
+func Add(val1, val2 float64) (float64, error) {
+	v1, err := AmountFromValue(val1)
+	if err != nil {
+		return 0, err
+	}
+
+	v2, err := AmountFromValue(val2)
+	if err != nil {
+		return 0, err
+	}
+	v3 := v1 + v2
+	v4 := ValueFromAmount(v3)
+	return v4, nil
+}
+
 /* 计算数值
 	v1, err := core.AmountFromValue(10000000.00009999)
 	if err != nil {
