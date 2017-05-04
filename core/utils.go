@@ -3,9 +3,7 @@ package core
 import (
 	"fmt"
 	"os"
-	"io/ioutil"
-	"strconv"
-	"errors"
+	"syscall"
 )
 
 const (
@@ -65,34 +63,17 @@ func Add(val1, val2 float64) (float64, error) {
 	return v4, nil
 }
 
-//进程锁
-func ProcLock(filename string) {
-	iManPid := fmt.Sprint(os.Getpid())
-	tmpDir := os.TempDir()
-	if err := ProcExsit(tmpDir); err == nil {
-		pidFile, _ := os.Create(filename)
-		defer pidFile.Close()
-		pidFile.WriteString(iManPid)
-	} else {
-		os.Exit(1)
-	}
+func LockFile(file *os.File) error {
+	return syscall.Flock(int(file.Fd()), syscall.LOCK_EX|syscall.LOCK_NB)
 }
 
-// 判断进程是否启动
-func ProcExsit(filename string) (err error) {
-	iManPidFile, err := os.Open(filename)
-	defer iManPidFile.Close()
-	if err == nil {
-		filePid, err := ioutil.ReadAll(iManPidFile)
-		if err == nil {
-			pidStr := fmt.Sprintf("%s", filePid)
-			pid, _ := strconv.Atoi(pidStr)
-			_, err := os.FindProcess(pid)
-
-			if err == nil {
-				return errors.New("[ERROR] 进程已经启动.")
-			}
-		}
+//进程锁
+func ProcLock(filename string) (*os.File) {
+	iManPid := fmt.Sprint(os.Getpid())
+	pidFile, _ := os.Create(filename)
+	pidFile.WriteString(iManPid)
+	if err := LockFile(pidFile); err != nil {
+		return nil
 	}
-	return nil
+	return pidFile
 }
