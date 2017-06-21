@@ -61,8 +61,8 @@ func NewClient(coinUser, coinPasswd, coinHost string, coinPort int) (client *Rpc
 	//client.client.Timeout = time.Duration(RPCTimeOut) * time.Second
 	client.client.Transport = &http.Transport{
 		Dial: func(netw, addr string) (net.Conn, error) {
-			deadline := time.Now().Add(30 * time.Second)
-			c, err := net.DialTimeout(netw, addr, time.Second*30)
+			deadline := time.Now().Add(RPCTimeOut * time.Second)
+			c, err := net.DialTimeout(netw, addr, time.Second*RPCTimeOut)
 			if err != nil {
 				return nil, err
 			}
