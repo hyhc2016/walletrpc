@@ -22,7 +22,7 @@ const CoinDefaultPort int = 8332
 const CoinDefaultProto string = "http"
 
 //RPCTimeOut default timeout(second)
-const RPCTimeOut = 150
+const RPCTimeOut = 3600
 
 //RpcClient RPC struct
 type RpcClient struct {

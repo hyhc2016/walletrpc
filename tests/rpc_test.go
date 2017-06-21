@@ -22,6 +22,8 @@ func TestRpc(t *testing.T) {
 
 		fmt.Println(rpc.GetBalance())
 
+		fmt.Println(rpc.GetNewAddress(""))
+
 		fmt.Println(rpc.SendToaddress("KtxcaUixq1akdnu8FwbhodJAc6KbfiWxPW",11))
 	}
 }
